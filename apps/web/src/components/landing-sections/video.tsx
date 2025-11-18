@@ -23,7 +23,6 @@ const Video = () => {
               backgroundImage:
                 "repeating-linear-gradient(315deg, #252525 0, #252525 1px, transparent 0, transparent 50%)",
               backgroundSize: "10px 10px",
-              backgroundAttachment: "fixed",
             } as React.CSSProperties
           }
           className="w-[30px] lg:w-[50px] absolute left-0 top-0 hidden lg:block"
@@ -37,7 +36,6 @@ const Video = () => {
               backgroundImage:
                 "repeating-linear-gradient(315deg, #252525 0, #252525 1px, transparent 0, transparent 50%)",
               backgroundSize: "10px 10px",
-              backgroundAttachment: "fixed",
             } as React.CSSProperties
           }
           className="w-[30px] lg:w-[50px] absolute right-0 top-0 hidden lg:block"
