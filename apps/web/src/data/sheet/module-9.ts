@@ -2,7 +2,7 @@ import { SheetModule } from "./types";
 
 export const module9: SheetModule = {
   id: "module-9",
-  name: "Continuing contribution from module 8 - understanding issue closure",
+  name: "Live fix of the issue - Part-1",
   docContent: `
       <h1>module 9: extending the browser-use contribution</h1>
       
