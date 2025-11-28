@@ -4,7 +4,6 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import type { Session } from "next-auth";
 
 export default function ProDashboardPage() {
   const { isPaidUser, isLoading } = useSubscription();
@@ -19,26 +18,25 @@ export default function ProDashboardPage() {
     }
   }, [isPaidUser, isLoading, router]);
 
-  const handleJoinSlack = async () => {
+  const handleJoinSlack: () => Promise<void> = async () => {
     if (isJoining) return;
+
     setIsJoining(true);
     setError(null);
 
-    if (!session?.user) {
-      setError("Please sign in to join the community");
-      setIsJoining(false);
-      return;
-    }
-
-    const accessToken = (session as Session)?.accessToken;
-
-    if (!accessToken) {
-      setError("Authentication token not found");
-      setIsJoining(false);
-      return;
-    }
-
     try {
+      if (!session?.user) {
+        setError("Please sign in to join the community");
+        return;
+      }
+
+      const accessToken = session?.accessToken;
+
+      if (!accessToken || typeof accessToken !== "string") {
+        setError("Authentication token not found");
+        return;
+      }
+
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${apiUrl}/join-community`, {
         method: "GET",
@@ -48,17 +46,45 @@ export default function ProDashboardPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.error || "Failed to join community");
-        setIsJoining(false);
+        let errorMessage = "Failed to join community";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // if json parsing fails, use default message
+        }
+        setError(errorMessage);
         return;
       }
 
-      const { slackInviteUrl } = await response.json();
+      let responseData: { slackInviteUrl?: string };
+      try {
+        responseData = await response.json();
+      } catch {
+        setError("Invalid response from server");
+        return;
+      }
+
+      const { slackInviteUrl } = responseData;
+
+      if (!slackInviteUrl || typeof slackInviteUrl !== "string") {
+        setError("Invalid Slack invite URL received");
+        return;
+      }
+
+      // validate url format
+      try {
+        new URL(slackInviteUrl);
+      } catch {
+        setError("Invalid Slack invite URL format");
+        return;
+      }
+
       window.location.href = slackInviteUrl;
     } catch (err) {
       console.error("Failed to join community:", err);
       setError("Failed to connect to server");
+    } finally {
       setIsJoining(false);
     }
   };
@@ -91,9 +117,7 @@ export default function ProDashboardPage() {
             >
               {isJoining ? "Joining..." : "Join Slack"}
             </button>
-            {error && (
-              <p className="text-error-text text-sm mt-2">{error}</p>
-            )}
+            {error && <p className="text-error-text text-sm mt-2">{error}</p>}
           </div>
         )}
       </div>
