@@ -75,8 +75,15 @@ export default function ProjectsContainer({
         {isProjectsPage && (
           <div className="flex gap-2">
             <Button
-              className="font-semibold text-text-primary bg-ox-purple text-sm sm:text-base h-10 sm:h-11 px-5 sm:px-6 hover:bg-white-500 rounded-md"
+              className="font-semibold text-text-primary bg-ox-purple text-sm sm:text-base h-10 sm:h-11 px-5 sm:px-6 hover:bg-ox-purple/80 rounded-md"
               onClick={() => setShowSavedPanel(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  if (e.key === " ") e.preventDefault();
+                  setShowSavedPanel(true);
+                }
+              }}
+              aria-label="View saved projects"
             >
               Saved Projects
               {savedProjects.length > 0 && (
@@ -86,8 +93,15 @@ export default function ProjectsContainer({
               )}
             </Button>
             <Button
-              className="font-semibold text-text-primary bg-ox-purple text-sm sm:text-base h-10 sm:h-11 px-5 sm:px-6 hover:bg-white-500 rounded-md"
+              className="font-semibold text-text-primary bg-ox-purple text-sm sm:text-base h-10 sm:h-11 px-5 sm:px-6 hover:bg-ox-purple/80 rounded-md"
               onClick={() => setShowFilters(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  if (e.key === " ") e.preventDefault();
+                  setShowFilters(true);
+                }
+              }}
+              aria-label="Open project filters"
             >
               Find projects
             </Button>

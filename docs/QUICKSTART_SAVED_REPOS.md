@@ -40,8 +40,10 @@ The Saved Repos feature has been fully implemented with all code, documentation,
 
 ### Step 1: Install Dependencies (if needed)
 ```bash
-# Root directory
-cd d:\Programming\opensource\opensox
+# Navigate to repository root (if not already there)
+cd /path/to/opensox
+
+# Note: If you're already in the cloned repository directory, you can skip the cd command above
 
 # Install dependencies (if not already done)
 pnpm install

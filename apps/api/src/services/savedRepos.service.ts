@@ -71,23 +71,26 @@ export const savedReposService = {
         let updatedRepos: SavedRepo[];
 
         switch (action) {
-            case "add":
+            case "add": {
                 // Add new repos, skip duplicates
                 const existingIds = new Set(currentRepos.map((r) => r.id));
                 const newRepos = repos.filter((r) => !existingIds.has(r.id));
                 updatedRepos = [...currentRepos, ...newRepos];
                 break;
+            }
 
-            case "remove":
+            case "remove": {
                 // Remove repos by ID
                 const removeIds = new Set(repos.map((r) => r.id));
                 updatedRepos = currentRepos.filter((r) => !removeIds.has(r.id));
                 break;
+            }
 
-            case "replace":
+            case "replace": {
                 // Replace entire list (for sync)
                 updatedRepos = repos;
                 break;
+            }
 
             default:
                 throw new Error(`Invalid action: ${action}`);

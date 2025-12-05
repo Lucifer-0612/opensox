@@ -335,8 +335,7 @@ ALTER TABLE "User" DROP COLUMN "saved_repos";
 
 ## Related Issues
 
-- Closes #XXX (if applicable)
-- Related to #YYY (if applicable)
+- Closes #219
 
 ---
 

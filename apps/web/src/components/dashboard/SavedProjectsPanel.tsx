@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useSavedProjectsStore } from "@/store/useSavedProjectsStore";
-import { SavedRepo } from "@opensox/shared";
+import { useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import {
     XMarkIcon,
     ArrowDownTrayIcon,
@@ -10,7 +9,8 @@ import {
     TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Badge } from "@/components/ui/badge";
-import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useSavedProjectsStore } from "@/store/useSavedProjectsStore";
 
 interface SavedProjectsPanelProps {
     isOpen: boolean;
@@ -21,7 +21,7 @@ export default function SavedProjectsPanel({
     isOpen,
     onClose,
 }: SavedProjectsPanelProps) {
-    const { savedProjects, clearAllSaved, setAll, removeProject } =
+    const { savedProjects, clearAllSaved, setAll, removeProject, importAndValidate } =
         useSavedProjectsStore();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -39,7 +39,7 @@ export default function SavedProjectsPanel({
         URL.revokeObjectURL(url);
     };
 
-    const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImport = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -47,8 +47,12 @@ export default function SavedProjectsPanel({
         reader.onload = (event) => {
             try {
                 const imported = JSON.parse(event.target?.result as string);
-                if (Array.isArray(imported)) {
-                    setAll(imported);
+                const result = importAndValidate(imported);
+
+                if (result.success) {
+                    alert(result.error || "Projects imported successfully!");
+                } else {
+                    alert(result.error || "Failed to import projects.");
                 }
             } catch (error) {
                 console.error("Failed to import saved repos:", error);

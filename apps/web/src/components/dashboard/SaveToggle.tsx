@@ -1,6 +1,5 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { useSavedProjectsStore } from "@/store/useSavedProjectsStore";
 import { DashboardProjectsProps } from "@/types";
 import { SavedRepo } from "@opensox/shared";
@@ -15,6 +14,13 @@ export default function SaveToggle({ project }: SaveToggleProps) {
     const { toggleProject, isSaved } = useSavedProjectsStore();
     const saved = isSaved(project.id);
 
+    // Type guard to validate popularity value
+    const isValidPopularity = (
+        value: string | undefined
+    ): value is "low" | "medium" | "high" => {
+        return value === "low" || value === "medium" || value === "high";
+    };
+
     const handleToggle = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent row click event
 
@@ -23,7 +29,9 @@ export default function SaveToggle({ project }: SaveToggleProps) {
             name: project.name,
             url: project.url,
             language: project.primaryLanguage,
-            popularity: project.popularity as "low" | "medium" | "high",
+            popularity: isValidPopularity(project.popularity)
+                ? project.popularity
+                : undefined,
             competitionScore: parseFloat(project.competition) || 0,
             savedAt: new Date().toISOString(),
             meta: {
@@ -39,14 +47,11 @@ export default function SaveToggle({ project }: SaveToggleProps) {
     };
 
     return (
-        <div
-            className="flex items-center justify-center"
-            onClick={handleToggle}
-            role="button"
-            aria-label={saved ? "Remove from saved" : "Save project"}
-        >
+        <div className="flex items-center justify-center">
             <button
+                onClick={handleToggle}
                 className="p-1 hover:bg-white/10 rounded transition-colors"
+                aria-label={saved ? "Remove from saved" : "Save project"}
                 aria-pressed={saved}
             >
                 {saved ? (

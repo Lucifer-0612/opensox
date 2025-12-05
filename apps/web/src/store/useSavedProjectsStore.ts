@@ -9,6 +9,7 @@ interface SavedProjectsState {
     toggleProject: (project: SavedRepo) => void;
     clearAllSaved: () => void;
     setAll: (projects: SavedRepo[]) => void;
+    importAndValidate: (data: unknown) => { success: boolean; error?: string };
     isSaved: (id: string) => boolean;
 }
 
@@ -52,6 +53,62 @@ export const useSavedProjectsStore = create<SavedProjectsState>()(
             clearAllSaved: () => set({ savedProjects: [] }),
 
             setAll: (projects: SavedRepo[]) => set({ savedProjects: projects }),
+
+            importAndValidate: (data: unknown) => {
+                // Validate that data is an array
+                if (!Array.isArray(data)) {
+                    return {
+                        success: false,
+                        error: "Invalid file format. Expected an array of saved projects.",
+                    };
+                }
+
+                // Helper to validate if an item matches SavedRepo shape
+                const isValidSavedRepo = (item: any): item is SavedRepo => {
+                    return (
+                        typeof item === "object" &&
+                        item !== null &&
+                        typeof item.id === "string" &&
+                        typeof item.name === "string" &&
+                        typeof item.url === "string" &&
+                        typeof item.savedAt === "string"
+                    );
+                };
+
+                // Filter and validate items
+                const validProjects = data.filter(isValidSavedRepo);
+
+                if (validProjects.length === 0) {
+                    return {
+                        success: false,
+                        error: "No valid projects found in the file.",
+                    };
+                }
+
+                // Deduplicate by id (keep first occurrence)
+                const seen = new Set<string>();
+                const deduped = validProjects.filter((project) => {
+                    if (seen.has(project.id)) {
+                        return false;
+                    }
+                    seen.add(project.id);
+                    return true;
+                });
+
+                // Limit to 100 items
+                const limited = deduped.slice(0, 100);
+
+                // Update store
+                set({ savedProjects: limited });
+
+                return {
+                    success: true,
+                    error:
+                        limited.length < validProjects.length
+                            ? `Imported ${limited.length} projects (limited to 100, ${validProjects.length - limited.length} duplicates removed)`
+                            : undefined,
+                };
+            },
 
             isSaved: (id: string) => {
                 return get().savedProjects.some((p) => p.id === id);
