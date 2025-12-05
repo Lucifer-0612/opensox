@@ -21,7 +21,7 @@ export default function SavedProjectsPanel({
     isOpen,
     onClose,
 }: SavedProjectsPanelProps) {
-    const { savedProjects, clearAllSaved, setAll, removeProject, importAndValidate } =
+    const { savedProjects, clearAllSaved, removeProject, importAndValidate } =
         useSavedProjectsStore();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [showClearConfirm, setShowClearConfirm] = useState(false);
