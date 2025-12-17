@@ -39,5 +39,10 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "exclude": [
+    "prisma/seed.ts",
+    "node_modules",
+    "dist"
+  ]
 }
