@@ -64,14 +64,17 @@ export const useSavedProjectsStore = create<SavedProjectsState>()(
                 }
 
                 // Helper to validate if an item matches SavedRepo shape
-                const isValidSavedRepo = (item: any): item is SavedRepo => {
+                const isValidSavedRepo = (item: unknown): item is SavedRepo => {
+                    if (typeof item !== "object" || item === null) {
+                        return false;
+                    }
+
+                    const obj = item as Record<string, unknown>;
                     return (
-                        typeof item === "object" &&
-                        item !== null &&
-                        typeof item.id === "string" &&
-                        typeof item.name === "string" &&
-                        typeof item.url === "string" &&
-                        typeof item.savedAt === "string"
+                        typeof obj.id === "string" &&
+                        typeof obj.name === "string" &&
+                        typeof obj.url === "string" &&
+                        typeof obj.savedAt === "string"
                     );
                 };
 

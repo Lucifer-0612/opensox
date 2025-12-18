@@ -105,7 +105,7 @@ export const savedReposService = {
         const updated = await prisma.user.update({
             where: { id: userId },
             data: {
-                saved_repos: updatedRepos,
+                saved_repos: updatedRepos as any, // Cast to satisfy Prisma's Json type
             },
             select: { saved_repos: true },
         });

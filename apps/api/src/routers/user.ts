@@ -60,7 +60,7 @@ export const userRouter = router({
             popularity: z.enum(["low", "medium", "high"]).optional(),
             competitionScore: z.number().optional(),
             savedAt: z.string(),
-            meta: z.record(z.string(), z.any()).optional(),
+            meta: z.record(z.string(), z.unknown()).optional(),
           })
         ),
         localRepos: z
@@ -73,7 +73,7 @@ export const userRouter = router({
               popularity: z.enum(["low", "medium", "high"]).optional(),
               competitionScore: z.number().optional(),
               savedAt: z.string(),
-              meta: z.record(z.string(), z.any()).optional(),
+              meta: z.record(z.string(), z.unknown()).optional(),
             })
           )
           .optional(),

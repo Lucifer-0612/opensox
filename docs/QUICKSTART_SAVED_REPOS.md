@@ -59,14 +59,14 @@ pnpm run build
 
 ### Step 3: Run Development Servers
 
-**Frontend Only (Recommended First)**
+#### Frontend Only (Recommended First)
 ```bash
 cd apps/web
 pnpm dev
 # Visit http://localhost:3000/dashboard/projects
 ```
 
-**Backend (Optional - for database sync)**
+#### Backend (Optional - for database sync)
 ```bash
 # Terminal 1: Frontend
 cd apps/web

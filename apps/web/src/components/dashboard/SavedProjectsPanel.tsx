@@ -115,14 +115,14 @@ export default function SavedProjectsPanel({
                         <Button
                             onClick={handleExport}
                             disabled={savedProjects.length === 0}
-                            className="bg-ox-purple hover:bg-ox-purple/80 text-text-primary text-sm h-9"
+                            className="bg-brand-purple hover:bg-brand-purple/80 text-text-primary text-sm h-9"
                         >
                             <ArrowDownTrayIcon className="h-4 w-4 mr-1" />
                             Export
                         </Button>
                         <Button
                             onClick={() => fileInputRef.current?.click()}
-                            className="bg-ox-purple hover:bg-ox-purple/80 text-text-primary text-sm h-9"
+                            className="bg-brand-purple hover:bg-brand-purple/80 text-text-primary text-sm h-9"
                         >
                             <ArrowUpTrayIcon className="h-4 w-4 mr-1" />
                             Import
@@ -175,7 +175,7 @@ export default function SavedProjectsPanel({
                                             {repo.language && (
                                                 <Badge
                                                     variant="secondary"
-                                                    className="text-xs bg-blue-500/15 text-blue-500"
+                                                    className="text-xs bg-info/15 text-info"
                                                 >
                                                     {repo.language}
                                                 </Badge>
@@ -183,7 +183,7 @@ export default function SavedProjectsPanel({
                                             {repo.popularity && (
                                                 <Badge
                                                     variant="secondary"
-                                                    className="text-xs bg-emerald-500/15 text-emerald-500"
+                                                    className="text-xs bg-success/15 text-success"
                                                 >
                                                     {repo.popularity}
                                                 </Badge>

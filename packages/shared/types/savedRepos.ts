@@ -6,7 +6,7 @@ export type SavedRepo = {
   popularity?: 'low' | 'medium' | 'high';
   competitionScore?: number;
   savedAt: string; // ISO timestamp
-  meta?: Record<string, any>; // Extensible metadata
+  meta?: Record<string, unknown>; // Extensible metadata
 };
 
 export type SavedReposAction = 'add' | 'remove' | 'replace';
