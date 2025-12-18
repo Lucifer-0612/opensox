@@ -7,6 +7,7 @@ import { Terminal, Github, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const Navbar = () => {
   const { scrollYProgress } = useScroll();
@@ -14,6 +15,20 @@ const Navbar = () => {
   const isPricingPage = pathname === "/pricing";
   const [showNavbar, setShowNavbar] = useState(isPricingPage ? true : false);
   const [isOpen, setIsOpen] = useState(false);
+  const { trackButtonClick, trackLinkClick } = useAnalytics();
+
+  const handleGetStartedClick = (location: "navbar" | "mobile_menu") => {
+    trackButtonClick("Get Started", location);
+  };
+
+  const handleContributeClick = (location: "navbar" | "mobile_menu") => {
+    trackLinkClick(
+      "https://github.com/apsinghdev/opensox",
+      "Contribute",
+      location,
+      true
+    );
+  };
 
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -46,7 +61,7 @@ const Navbar = () => {
   return (
     <motion.nav
       initial={{ opacity: 0 }}
-      animate={showNavbar ? { opacity: 1 } : { opacity: 0 }}
+      animate={showNavbar ? { opacity: 1 } : { opacity: 0, display: "none" }}
       transition={{ duration: 0.3 }}
       className={cn(
         " z-40  flex items-center justify-between px-4 py-3  bg-neutral-900/5 backdrop-blur-xl  border-white/10",
@@ -57,7 +72,7 @@ const Navbar = () => {
     >
       <div className="flex items-center gap-3">
         <button
-          className="md:hidden text-white"
+          className="min-[1115px]:hidden text-white"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle navigation menu"
           aria-expanded={isOpen}
@@ -76,7 +91,7 @@ const Navbar = () => {
           <span>Opensox AI</span>
         </div>
       </div>
-      <div className="hidden md:flex items-center gap-5 tracking-tight text-lg font-light text-text-tertiary">
+      <div className="hidden min-[1115px]:flex items-center gap-5 max-[1270px]:gap-4 max-[1173px]:gap-3 tracking-tight text-lg max-[1270px]:text-base max-[1173px]:text-sm font-light max-[1173px]:font-normal text-[#d1d1d1]">
         {links.map((link, index) => {
           const isActive = pathname === link.href;
           return (
@@ -98,12 +113,17 @@ const Navbar = () => {
           href="https://github.com/apsinghdev/opensox"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden lg:flex items-center gap-2 px-4 py-2.5 bg-[#0d1117] hover:bg-[#161b22] transition-colors rounded-lg border border-[#30363d] text-white"
+          onClick={() => handleContributeClick("navbar")}
+          className="hidden min-[1115px]:flex items-center gap-2 px-4 py-2.5 bg-github-bg hover:bg-github-hover transition-colors rounded-lg border border-github-border text-white"
         >
           <Github className="w-5 h-5" />
           <span className="text-sm font-medium">Contribute</span>
         </Link>
-        <Link href="/dashboard/home" className="cursor-pointer z-30">
+        <Link
+          href="/dashboard/home"
+          className="cursor-pointer z-30"
+          onClick={() => handleGetStartedClick("navbar")}
+        >
           <PrimaryButton classname="px-3 py-2 text-sm whitespace-nowrap md:px-5 md:py-3 md:text-base">
             <Terminal className="w-4 h-4 md:w-5 md:h-5" />
             <span>Get Started</span>
@@ -115,7 +135,7 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="absolute top-full mt-2 left-0 w-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 md:hidden flex flex-col items-center py-5 space-y-4 z-50 rounded-3xl"
+          className="absolute top-full mt-2 left-0 w-full bg-neutral-900/90 backdrop-blur-xl border border-white/10 min-[1115px]:hidden flex flex-col items-center py-5 space-y-4 z-50 rounded-3xl"
         >
           {links.map((link, index) => (
             <Link
@@ -131,8 +151,11 @@ const Navbar = () => {
             href="https://github.com/apsinghdev/opensox"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0d1117] hover:bg-[#161b22] rounded-lg border border-[#30363d] text-white transition-colors"
+            onClick={() => {
+              setIsOpen(false);
+              handleContributeClick("mobile_menu");
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-github-bg hover:bg-github-hover rounded-lg border border-github-border text-white transition-colors"
           >
             <Github className="w-5 h-5" />
             <span className="text-sm font-medium">Contribute</span>

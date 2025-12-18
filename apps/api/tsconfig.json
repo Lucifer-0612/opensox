@@ -35,8 +35,12 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "prisma",
+    "node_modules",
     "dist"
   ]
 }

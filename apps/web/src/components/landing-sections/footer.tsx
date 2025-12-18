@@ -3,13 +3,21 @@ import React from "react";
 import { Twitter, Email, Discord, Youtube, Github } from "../icons/icons";
 import Link from "next/link";
 import Image from "next/image";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const Footer = () => {
+  const { trackLinkClick } = useAnalytics();
+
   const handleEmailClick = () => {
+    trackLinkClick("mailto:hi@opensox.ai", "Email", "footer", true);
     const emailSubject = encodeURIComponent("[Inquiry about Opensox AI]");
     const emailBody = encodeURIComponent("Heyyo,\n\nwanna chat?");
     const mailtoLink = `mailto:hi@opensox.ai?subject=${emailSubject}&body=${emailBody}`;
     window.open(mailtoLink, "_blank");
+  };
+
+  const handleSocialClick = (url: string, name: string) => {
+    trackLinkClick(url, name, "footer", true);
   };
 
   return (
@@ -66,10 +74,24 @@ const Footer = () => {
                   Pricing
                 </Link>
                 <Link
+                  href="/pitch"
+                  className="text-[#b1b1b1] hover:text-white transition-colors text-xs"
+                >
+                  My pitch to you
+                </Link>
+                <Link
                   href="/blogs"
                   className="text-[#b1b1b1] hover:text-white transition-colors text-xs"
                 >
                   Blogs
+                </Link>
+                <Link
+                  href="https://github.com/apsinghdev/opensox/graphs/contributors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#b1b1b1] hover:text-white transition-colors text-xs"
+                >
+                  Team
                 </Link>
                 {/* <Link
                   href="#"
@@ -129,6 +151,9 @@ const Footer = () => {
                   href="https://x.com/opensoxai"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    handleSocialClick("https://x.com/opensoxai", "Twitter")
+                  }
                   className="text-[#b1b1b1] hover:text-white transition-colors text-xs flex items-center gap-1.5"
                 >
                   <span className="w-3.5">
@@ -140,6 +165,12 @@ const Footer = () => {
                   href="https://github.com/apsinghdev/opensox"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    handleSocialClick(
+                      "https://github.com/apsinghdev/opensox",
+                      "GitHub"
+                    )
+                  }
                   className="text-[#b1b1b1] hover:text-white transition-colors text-xs flex items-center gap-1.5"
                 >
                   <span className="w-3.5">
@@ -151,6 +182,12 @@ const Footer = () => {
                   href="https://www.youtube.com/channel/UC7QV7uSxlbha-bNPaev5MeQ"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    handleSocialClick(
+                      "https://www.youtube.com/channel/UC7QV7uSxlbha-bNPaev5MeQ",
+                      "YouTube"
+                    )
+                  }
                   className="text-[#b1b1b1] hover:text-white transition-colors text-xs flex items-center gap-1.5"
                 >
                   <span className="w-3.5">
@@ -162,6 +199,12 @@ const Footer = () => {
                   href="https://discord.gg/zbHzgMNBrm"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    handleSocialClick(
+                      "https://discord.gg/zbHzgMNBrm",
+                      "Discord"
+                    )
+                  }
                   className="text-[#b1b1b1] hover:text-white transition-colors text-xs flex items-center gap-1.5"
                 >
                   <span className="w-3.5">
