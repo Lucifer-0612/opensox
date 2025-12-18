@@ -195,10 +195,10 @@ export default function SavedProjectsPanel({
                                     </div>
                                     <button
                                         onClick={() => removeProject(repo.id)}
-                                        className="p-1 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 rounded transition-all"
+                                        className="p-1 opacity-0 group-hover:opacity-100 hover:bg-error/20 rounded transition-all"
                                         aria-label="Remove from saved"
                                     >
-                                        <XMarkIcon className="h-4 w-4 text-red-500" />
+                                        <XMarkIcon className="h-4 w-4 text-error" />
                                     </button>
                                 </div>
                             </div>
